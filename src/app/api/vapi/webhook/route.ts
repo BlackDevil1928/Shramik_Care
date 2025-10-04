@@ -1,8 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { vapiClient } from '@/lib/vapi';
-import { supabase, dbHelpers, generateMHI } from '@/lib/supabase';
+import { dbHelpers, generateMHI } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import type { VapiWebhook, Language } from '@/types';
+
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!supabaseUrl || !serviceKey) {
+    throw new Error('Supabase environment variables are not configured');
+  }
+  
+  return createClient(supabaseUrl, serviceKey);
+}
 
 // Webhook endpoint for Vapi.ai voice calls
 export async function POST(request: NextRequest) {
@@ -74,6 +86,7 @@ async function handleCallEnded(webhook: VapiWebhook) {
     const language = extractLanguageFromMetadata(callData) as Language;
 
     // Update voice session with final data
+    const supabase = getSupabaseClient();
     const { data: existingSession } = await supabase
       .from('voice_sessions')
       .select('*')
@@ -199,6 +212,7 @@ async function sendMHIConfirmation(phone: string, mhiId: string, language: Langu
     const message = messages[language];
 
     // Log SMS for sending (actual SMS integration would go here)
+    const supabase = getSupabaseClient();
     await (supabase as any)
       .from('sms_notifications')
       .insert({
@@ -220,6 +234,7 @@ async function checkDiseaseHotspot(extractedData: any, location: any) {
     if (!extractedData.symptoms || !location.district) return;
 
     // Get recent cases in the same district
+    const supabase = getSupabaseClient();
     const { data: recentCases } = await supabase
       .from('health_records')
       .select('symptoms, reported_at')
