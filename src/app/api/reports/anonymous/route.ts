@@ -2,10 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { nanoid } from 'nanoid';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // Use service role key for server-side operations
-);
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!supabaseUrl || !serviceKey) {
+    throw new Error('Supabase environment variables are not configured');
+  }
+  
+  return createClient(supabaseUrl, serviceKey);
+}
 
 interface AnonymousReport {
   id?: string;
@@ -92,6 +98,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Insert into anonymous_reports table
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from('anonymous_reports')
       .insert([anonymousRecord])
@@ -184,6 +191,7 @@ async function updateSurveillanceData(report: any) {
     const today = new Date().toISOString().split('T')[0];
     
     // Upsert surveillance data
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from('surveillance_daily_aggregates')
       .upsert({
@@ -217,6 +225,7 @@ async function checkForHotspots(report: any) {
     // Query recent reports in the same district
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     
+    const supabase = getSupabaseClient();
     const { data: recentReports, error } = await supabase
       .from('anonymous_reports')
       .select('severity, symptoms, hotspot_contribution')
@@ -295,6 +304,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build query
+    const supabase = getSupabaseClient();
     let query = supabase
       .from('anonymous_reports')
       .select('severity, symptoms, location_district, created_at')

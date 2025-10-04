@@ -1,6 +1,11 @@
 'use client';
 
-import SymptomChecker from '@/components/symptom-checker/SymptomChecker';
+import dynamic from 'next/dynamic';
+
+const SymptomChecker = dynamic(
+  () => import('@/components/symptom-checker/SymptomChecker'),
+  { ssr: false }
+);
 
 export default function SymptomCheckerPage() {
   return (
