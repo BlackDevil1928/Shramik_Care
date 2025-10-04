@@ -27,46 +27,52 @@ export async function GET() {
 
     const warnings: string[] = [];
 
-    // Helper to safely query a table and degrade gracefully
-    const safeQuery = async <T>(fn: () => Promise<{ data: T | null; error: any }>, label: string): Promise<T> => {
-      try {
-        const { data, error } = await fn();
-        if (error) {
-          warnings.push(`${label}: ${error?.message || 'unknown error'}`);
-          return [] as unknown as T;
-        }
-        return (data ?? ([] as unknown as T));
-      } catch (e: any) {
-        warnings.push(`${label}: ${e?.message || 'fetch failed'}`);
-        return [] as unknown as T;
-      }
-    };
-
-    // Fetch workers
-    const workers = await safeQuery<any[]>(
-      () => supabase
+    // Fetch workers with error handling
+    let workers: any[] = [];
+    try {
+      const { data, error } = await supabase
         .from('migrant_workers')
         .select('id, current_location, created_at')
-        .eq('is_active', true),
-      'workers_query_failed'
-    );
+        .eq('is_active', true);
+      if (error) {
+        warnings.push(`workers_query_failed: ${error.message}`);
+      } else {
+        workers = data || [];
+      }
+    } catch (e: any) {
+      warnings.push(`workers_query_failed: ${e?.message || 'fetch failed'}`);
+    }
 
-    // Fetch health records
-    const healthRecords = await safeQuery<any[]>(
-      () => supabase
+    // Fetch health records with error handling
+    let healthRecords: any[] = [];
+    try {
+      const { data, error } = await supabase
         .from('health_records')
-        .select('id, severity, reported_via, is_anonymous, reported_at, location'),
-      'health_records_query_failed'
-    );
+        .select('id, severity, reported_via, is_anonymous, reported_at, location');
+      if (error) {
+        warnings.push(`health_records_query_failed: ${error.message}`);
+      } else {
+        healthRecords = data || [];
+      }
+    } catch (e: any) {
+      warnings.push(`health_records_query_failed: ${e?.message || 'fetch failed'}`);
+    }
 
-    // Fetch active surveillance
-    const surveillance = await safeQuery<any[]>(
-      () => supabase
+    // Fetch active surveillance with error handling
+    let surveillance: any[] = [];
+    try {
+      const { data, error } = await supabase
         .from('disease_surveillance')
         .select('id, severity_level, status')
-        .eq('status', 'active'),
-      'surveillance_query_failed'
-    );
+        .eq('status', 'active');
+      if (error) {
+        warnings.push(`surveillance_query_failed: ${error.message}`);
+      } else {
+        surveillance = data || [];
+      }
+    } catch (e: any) {
+      warnings.push(`surveillance_query_failed: ${e?.message || 'fetch failed'}`);
+    }
 
     // Calculate statistics
     const today = new Date().toISOString().split('T')[0];

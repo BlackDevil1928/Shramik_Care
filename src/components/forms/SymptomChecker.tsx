@@ -172,7 +172,7 @@ const SymptomChecker: React.FC<SymptomCheckerProps> = ({
     }
   };
 
-  const currentData = symptomDatabase[language] || symptomDatabase.en;
+  const currentData = symptomDatabase[language as keyof typeof symptomDatabase] || symptomDatabase.en;
 
   useEffect(() => {
     // Initialize speech recognition

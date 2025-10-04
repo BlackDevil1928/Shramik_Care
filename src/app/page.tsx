@@ -83,7 +83,7 @@ const HomePage = () => {
     }
   };
 
-  const currentTranslation = translations[currentLanguage];
+  const currentTranslation = translations[currentLanguage as keyof typeof translations] || translations.en;
 
   if (!mounted) {
     return (
