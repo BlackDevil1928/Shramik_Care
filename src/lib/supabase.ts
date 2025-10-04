@@ -1,37 +1,75 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types';
 
-// Environment variables - these should be set in .env.local
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Client-side Supabase instance (lazy-loaded)
+let clientInstance: ReturnType<typeof createClient<Database>> | null = null;
 
-// Create Supabase client with healthcare-compliant configuration
-export const supabase = createClient<Database>(
-  supabaseUrl,
-  supabaseAnonKey,
-  {
+// Get client-side Supabase instance (for browser/client components)
+export function getSupabaseClient() {
+  if (clientInstance) return clientInstance;
+  
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // Return a dummy client during build time
+    if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
+      return null as any;
+    }
+    throw new Error('Supabase environment variables are not configured');
+  }
+  
+  clientInstance = createClient<Database>(
+    supabaseUrl,
+    supabaseAnonKey,
+    {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+        storageKey: 'kerala-migrant-health-auth',
+      },
+      db: {
+        schema: 'public',
+      },
+      global: {
+        headers: {
+          'X-Client-Info': 'kerala-migrant-health-system@1.0.0',
+        },
+      },
+    }
+  );
+  
+  return clientInstance;
+}
+
+// Server-side Supabase instance (for API routes with service role)
+export function getSupabaseServerClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!supabaseUrl || !serviceKey) {
+    throw new Error('Supabase server environment variables are not configured');
+  }
+  
+  return createClient<Database>(supabaseUrl, serviceKey, {
     auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-      // Enhanced security for healthcare data
-      storageKey: 'kerala-migrant-health-auth',
+      persistSession: false,
     },
     db: {
       schema: 'public',
     },
-    global: {
-      headers: {
-        'X-Client-Info': 'kerala-migrant-health-system@1.0.0',
-      },
-    },
-  }
-);
+  });
+}
+
+// Legacy export for backward compatibility (client-side)
+export const supabase = typeof window !== 'undefined' ? getSupabaseClient() : null as any;
 
 // Helper functions for common database operations
 export const dbHelpers = {
   // Migrant Workers
   async createWorker(worker: any): Promise<any> {
+    const supabase = getSupabaseServerClient();
     const { data, error } = await supabase
       .from('migrant_workers')
       .insert(worker as any)
@@ -43,6 +81,7 @@ export const dbHelpers = {
   },
 
   async getWorkerByMHI(mhi_id: string) {
+    const supabase = getSupabaseServerClient();
     const { data, error } = await supabase
       .from('migrant_workers')
       .select('*, health_records(*)')
@@ -54,6 +93,7 @@ export const dbHelpers = {
   },
 
   async updateWorker(id: string, updates: any) {
+    const supabase = getSupabaseServerClient();
     const { data, error } = await (supabase
       .from('migrant_workers')
       .update as any)(updates)
@@ -67,7 +107,8 @@ export const dbHelpers = {
 
   // Health Records
   async createHealthRecord(record: any): Promise<any> {
-    const { data, error } = await supabase
+    const supabase = getSupabaseServerClient();
+    const { data, error} = await supabase
       .from('health_records')
       .insert(record as any)
       .select()
@@ -78,6 +119,7 @@ export const dbHelpers = {
   },
 
   async getHealthRecordsByLocation(district: string, limit = 100) {
+    const supabase = getSupabaseServerClient();
     const { data, error } = await supabase
       .from('health_records')
       .select('*, migrant_workers(name, age, occupation)')
@@ -90,6 +132,7 @@ export const dbHelpers = {
   },
 
   async getSymptomClusters(timeframe_hours = 24) {
+    const supabase = getSupabaseServerClient();
     const timeThreshold = new Date(Date.now() - timeframe_hours * 60 * 60 * 1000).toISOString();
     
     const { data, error } = await supabase
@@ -103,6 +146,7 @@ export const dbHelpers = {
 
   // Voice Sessions
   async createVoiceSession(session: any) {
+    const supabase = getSupabaseServerClient();
     const { data, error } = await supabase
       .from('voice_sessions')
       .insert(session as any)
@@ -114,6 +158,7 @@ export const dbHelpers = {
   },
 
   async updateVoiceSession(call_id: string, updates: any) {
+    const supabase = getSupabaseServerClient();
     const { data, error } = await (supabase
       .from('voice_sessions')
       .update as any)(updates)
@@ -127,6 +172,7 @@ export const dbHelpers = {
 
   // Anonymous reporting (privacy-preserving)
   async createAnonymousReport(location: any, symptoms: string[], severity: string) {
+    const supabase = getSupabaseServerClient();
     const { data, error } = await supabase
       .from('health_records')
       .insert({
@@ -150,6 +196,7 @@ export const dbHelpers = {
 // Real-time subscription helpers
 export const realtimeHelpers = {
   subscribeToHealthAlerts(callback: (payload: any) => void) {
+    const supabase = getSupabaseClient();
     return supabase
       .channel('health_alerts')
       .on(
@@ -166,6 +213,7 @@ export const realtimeHelpers = {
   },
 
   subscribeToLocationAlerts(district: string, callback: (payload: any) => void) {
+    const supabase = getSupabaseClient();
     return supabase
       .channel(`location_alerts_${district}`)
       .on(
@@ -175,7 +223,7 @@ export const realtimeHelpers = {
           schema: 'public',
           table: 'health_records',
         },
-        (payload) => {
+        (payload: any) => {
           // Filter by district in the callback since Postgres filters have limitations
           if (payload.new.location?.district === district) {
             callback(payload);
