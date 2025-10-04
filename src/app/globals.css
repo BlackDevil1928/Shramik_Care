@@ -1,0 +1,405 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom CSS Variables for Kerala Health System */
+:root {
+  --kerala-teal: #008B8B;
+  --neon-blue: #00BFFF;
+  --health-green: #32CD32;
+  --warning-orange: #FF8C00;
+  --error-red: #FF4500;
+}
+
+/* Global base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid var(--neon-blue);
+  outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Custom animations */
+@keyframes gradient-x {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse-neon {
+  0% { 
+    box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+    opacity: 1;
+  }
+  50% { 
+    box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue);
+    opacity: 0.8;
+  }
+  100% { 
+    box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Custom component styles */
+
+/* Voice interface styles */
+.voice-active {
+  animation: pulse-neon 1s infinite;
+  background: linear-gradient(45deg, var(--kerala-teal), var(--neon-blue));
+}
+
+.voice-listening::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200%;
+  height: 200%;
+  border: 2px solid var(--neon-blue);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+/* Kiosk mode styles for large touch targets */
+.kiosk-mode {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+}
+
+.kiosk-mode * {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.kiosk-mode button {
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  min-height: 180px;
+  min-width: 200px;
+  font-size: 1.5rem;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.kiosk-mode button:focus {
+  outline: 3px solid var(--neon-blue);
+  outline-offset: 2px;
+}
+
+.kiosk-mode button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.kiosk-mode button:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.kiosk-mode .btn {
+  min-height: 80px;
+  min-width: 200px;
+  font-size: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.kiosk-mode .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Emergency button with pulsing animation */
+.kiosk-mode .emergency-button {
+  animation: pulse-red 2s infinite;
+  border: 3px solid #fca5a5;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Attract mode overlay */
+.kiosk-mode .attract-mode {
+  background: linear-gradient(135deg, var(--kerala-teal) 0%, var(--neon-blue) 100%);
+  backdrop-filter: blur(10px);
+}
+
+/* Touch-friendly scrollbars for kiosk */
+.kiosk-mode ::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+.kiosk-mode ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.kiosk-mode ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+  border: 2px solid #f1f5f9;
+}
+
+.kiosk-mode ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Health severity indicators */
+.severity-low {
+  border-left: 4px solid var(--health-green);
+  background: rgba(50, 205, 50, 0.1);
+}
+
+.severity-medium {
+  border-left: 4px solid var(--warning-orange);
+  background: rgba(255, 140, 0, 0.1);
+}
+
+.severity-high {
+  border-left: 4px solid var(--error-red);
+  background: rgba(255, 69, 0, 0.1);
+}
+
+.severity-critical {
+  border-left: 4px solid #dc2626;
+  background: rgba(220, 38, 38, 0.2);
+  animation: heartbeat 2s infinite;
+}
+
+/* Language selector styles */
+.language-flag {
+  width: 32px;
+  height: 24px;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center;
+  display: inline-block;
+  margin-right: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* 3D Map container styles */
+.map-container {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.map-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(0, 191, 255, 0.1) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Disease hotspot indicators */
+.hotspot-low {
+  background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, rgba(50, 205, 50, 0.2) 50%, transparent 100%);
+}
+
+.hotspot-medium {
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.7) 0%, rgba(255, 140, 0, 0.3) 50%, transparent 100%);
+}
+
+.hotspot-high {
+  background: radial-gradient(circle, rgba(255, 69, 0, 0.8) 0%, rgba(255, 69, 0, 0.4) 50%, transparent 100%);
+}
+
+.hotspot-critical {
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.9) 0%, rgba(220, 38, 38, 0.5) 50%, transparent 100%);
+  animation: pulse 2s infinite;
+}
+
+/* Card components */
+.health-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.health-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* QR Code styles */
+.qr-code-container {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+/* Loading states */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Voice waveform animation */
+.voice-waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.voice-waveform .bar {
+  width: 4px;
+  background: var(--neon-blue);
+  border-radius: 2px;
+  animation: voice-wave 1s infinite;
+}
+
+.voice-waveform .bar:nth-child(1) { animation-delay: 0s; height: 10px; }
+.voice-waveform .bar:nth-child(2) { animation-delay: 0.1s; height: 20px; }
+.voice-waveform .bar:nth-child(3) { animation-delay: 0.2s; height: 15px; }
+.voice-waveform .bar:nth-child(4) { animation-delay: 0.3s; height: 25px; }
+.voice-waveform .bar:nth-child(5) { animation-delay: 0.4s; height: 18px; }
+
+@keyframes voice-wave {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+
+/* Responsive design for mobile-first approach */
+@media (max-width: 640px) {
+  .kiosk-mode {
+    font-size: 1.25rem;
+  }
+  
+  .kiosk-mode .btn {
+    min-height: 60px;
+    min-width: 150px;
+    font-size: 1.1rem;
+  }
+  
+  .health-card {
+    margin: 0 8px;
+  }
+}
+
+/* High contrast mode for accessibility */
+@media (prefers-contrast: high) {
+  .health-card {
+    border: 2px solid #000;
+    background: #fff;
+  }
+  
+  .btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .health-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  body {
+    background: white !important;
+  }
+}
