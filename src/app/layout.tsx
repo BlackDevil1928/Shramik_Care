@@ -6,6 +6,7 @@ import EmergencyButton from '@/components/EmergencyButton';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   title: 'Kerala Migrant Health System | Digital Health Records for Migrant Workers',
   description: 'Voice-first, multilingual digital health record management system for migrant workers in Kerala. Supports Hindi, Bengali, Oriya, Tamil, Nepali, Malayalam, and English.',
   keywords: 'Kerala, migrant workers, health records, voice AI, multilingual, digital health, UN SDG',
