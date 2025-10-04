@@ -75,10 +75,10 @@ export default function SymptomSelector({
                 <span className="text-2xl">{symptom.icon}</span>
                 <div>
                   <div className="font-medium">
-                    {symptom.name[language] || symptom.name.en}
+                    {symptom.name[language as keyof typeof symptom.name] || symptom.name.en}
                   </div>
                   <div className="text-sm text-gray-600">
-                    {symptom.description[language] || symptom.description.en}
+                    {symptom.description[language as keyof typeof symptom.description] || symptom.description.en}
                   </div>
                 </div>
               </div>
@@ -101,7 +101,7 @@ export default function SymptomSelector({
                   key={selected.symptomId}
                   className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-kerala-teal text-white"
                 >
-                  {symptom?.icon} {symptom?.name[language] || symptom?.name.en}
+                  {symptom?.icon} {symptom?.name[language as keyof typeof symptom.name] || symptom?.name.en}
                   <button
                     onClick={() => onSymptomRemove(selected.symptomId)}
                     className="ml-2 hover:bg-white/20 rounded-full px-1"

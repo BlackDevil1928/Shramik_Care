@@ -103,7 +103,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     }
   };
 
-  const currentPrompts = prompts[language] || prompts.en;
+  const currentPrompts = prompts[language as keyof typeof prompts] || prompts.en;
 
   useEffect(() => {
     // Initialize Speech Recognition
@@ -317,7 +317,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       ml: ['പനി', 'ചുമ', 'തലവേദന', 'വേदന', 'ഓക്കാനം']
     };
     
-    const keywords = symptomKeywords[lang] || symptomKeywords.en;
+    const keywords = symptomKeywords[lang as keyof typeof symptomKeywords] || symptomKeywords.en;
     const foundSymptoms: string[] = [];
     
     keywords.forEach(keyword => {

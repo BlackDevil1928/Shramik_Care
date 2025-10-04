@@ -150,7 +150,7 @@ export class SymptomMatcher {
       // Add other languages as needed
     };
     
-    const keywords = severityKeywords[language] || severityKeywords.en;
+    const keywords = severityKeywords[language as keyof typeof severityKeywords] || severityKeywords.en;
     
     if (keywords.critical.some(word => contextLower.includes(word))) return 'critical';
     if (keywords.severe.some(word => contextLower.includes(word))) return 'severe';

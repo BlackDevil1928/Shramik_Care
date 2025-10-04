@@ -80,12 +80,12 @@ export class SecurityCompliance {
   /**
    * Generate secure JWT token
    */
-  generateJWT(payload: Record<string, any>, expiresIn: string = '24h'): string {
-    return jwt.sign(payload, this.jwtSecret, { 
-      expiresIn,
+  generateJWT(payload: Record<string, any>, expiresIn: string | number = '24h'): string {
+    return jwt.sign(payload, this.jwtSecret as jwt.Secret, { 
+      expiresIn: expiresIn as any,
       issuer: 'kerala-health-system',
       audience: 'migrant-workers'
-    });
+    } as jwt.SignOptions);
   }
 
   /**
@@ -93,7 +93,7 @@ export class SecurityCompliance {
    */
   verifyJWT(token: string): Record<string, any> | null {
     try {
-      return jwt.verify(token, this.jwtSecret, {
+      return jwt.verify(token, this.jwtSecret as jwt.Secret, {
         issuer: 'kerala-health-system',
         audience: 'migrant-workers'
       }) as Record<string, any>;

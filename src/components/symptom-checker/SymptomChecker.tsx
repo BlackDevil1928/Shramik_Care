@@ -89,7 +89,7 @@ export default function SymptomChecker({
     }
   };
 
-  const t = translations[language] || translations.en;
+  const t = translations[language as keyof typeof translations] || translations.en;
 
   useEffect(() => {
     // Analyze symptoms when they change
@@ -324,7 +324,7 @@ export default function SymptomChecker({
         {currentStep !== 'voice' && (
           <button
             onClick={() => {
-              const steps: typeof currentStep[] = ['voice', 'symptoms', 'severity', 'results'];
+              const steps: ('voice' | 'symptoms' | 'severity' | 'results')[] = ['voice', 'symptoms', 'severity', 'results'];
               const currentIndex = steps.indexOf(currentStep);
               if (currentIndex > 0) {
                 setCurrentStep(steps[currentIndex - 1]);

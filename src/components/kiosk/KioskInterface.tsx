@@ -127,7 +127,7 @@ const KioskInterface: React.FC<KioskInterfaceProps> = ({
     }
   };
 
-  const currentContent = kioskContent[selectedLanguage] || kioskContent.en;
+  const currentContent = kioskContent[selectedLanguage as keyof typeof kioskContent] || kioskContent.en;
 
   useEffect(() => {
     // Initialize speech synthesis

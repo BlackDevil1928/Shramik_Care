@@ -40,7 +40,7 @@ export async function testDatabaseConnection() {
     return { success: true, message: 'Database connection test completed' };
   } catch (error) {
     console.error('❌ Database connection test failed:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 

@@ -125,7 +125,7 @@ export default function RiskDashboard({ workerId, language }: RiskDashboardProps
               <div key={alert.id} className="bg-white rounded-lg p-4 border border-red-200">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="font-medium text-red-900">
-                    {alert.condition.name[language] || alert.condition.name.en}
+                    {alert.condition.name[language as keyof typeof alert.condition.name] || alert.condition.name.en}
                   </h4>
                   <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                     alert.severity === 'critical' ? 'bg-red-500 text-white' : 'bg-orange-500 text-white'
@@ -134,12 +134,12 @@ export default function RiskDashboard({ workerId, language }: RiskDashboardProps
                   </span>
                 </div>
                 <p className="text-red-700 mb-3">
-                  {alert.message[language] || alert.message.en}
+                  {alert.message[language as keyof typeof alert.message] || alert.message.en}
                 </p>
                 <div>
                   <strong className="text-red-800">Recommendations:</strong>
                   <ul className="list-disc list-inside mt-1 text-sm text-red-700">
-                    {(alert.recommendations[language] || alert.recommendations.en).map((rec, i) => (
+                    {(alert.recommendations[language as keyof typeof alert.recommendations] || alert.recommendations.en).map((rec, i) => (
                       <li key={i}>{rec}</li>
                     ))}
                   </ul>
@@ -165,7 +165,7 @@ export default function RiskDashboard({ workerId, language }: RiskDashboardProps
             <div key={prediction.id} className="border rounded-lg p-4">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="font-medium text-lg">
-                  {prediction.condition.name[language] || prediction.condition.name.en}
+                  {prediction.condition.name[language as keyof typeof prediction.condition.name] || prediction.condition.name.en}
                 </h4>
                 <div className="flex items-center space-x-2">
                   <span className={`px-3 py-1 rounded-full text-sm font-bold ${getRiskColor(prediction.riskLevel)}`}>
@@ -178,7 +178,7 @@ export default function RiskDashboard({ workerId, language }: RiskDashboardProps
               </div>
 
               <p className="text-gray-600 mb-3">
-                {prediction.condition.description[language] || prediction.condition.description.en}
+                {prediction.condition.description[language as keyof typeof prediction.condition.description] || prediction.condition.description.en}
               </p>
 
               <div className="grid md:grid-cols-2 gap-4">

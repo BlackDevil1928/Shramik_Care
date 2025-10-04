@@ -58,10 +58,10 @@ export default function SymptomSeverityRating({
               <span className="text-3xl">{symptomData?.icon}</span>
               <div>
                 <h3 className={`font-semibold ${isKioskMode ? 'text-xl' : 'text-lg'}`}>
-                  {symptomData?.name[language] || symptomData?.name.en}
+                  {symptomData?.name[language as keyof typeof symptomData.name] || symptomData?.name.en}
                 </h3>
                 <p className={`text-gray-600 ${isKioskMode ? 'text-base' : 'text-sm'}`}>
-                  {symptomData?.description[language] || symptomData?.description.en}
+                  {symptomData?.description[language as keyof typeof symptomData.description] || symptomData?.description.en}
                 </p>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default function SymptomSeverityRating({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {option.label[language] || option.label.en}
+                    {option.label[language as keyof typeof option.label] || option.label.en}
                   </motion.button>
                 ))}
               </div>
@@ -105,7 +105,7 @@ export default function SymptomSeverityRating({
               >
                 {durationOptions.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label[language] || option.label.en}
+                    {option.label[language as keyof typeof option.label] || option.label.en}
                   </option>
                 ))}
               </select>

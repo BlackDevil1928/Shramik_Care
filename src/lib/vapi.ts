@@ -124,8 +124,8 @@ export class VapiClient {
         temperature: 0.7,
         maxTokens: 500,
       },
-      firstMessage: healthPrompts[language]?.greeting || healthPrompts.en.greeting,
-      serverUrl: vapiConfigs[language].webhook_url,
+      firstMessage: healthPrompts[language as keyof typeof healthPrompts]?.greeting || healthPrompts.en.greeting,
+      serverUrl: vapiConfigs[language as keyof typeof vapiConfigs].webhook_url,
       endCallMessage: "Thank you for using Kerala Health System. Take care!",
       recordingEnabled: false, // Privacy-compliant
       silenceTimeoutSeconds: 30,
@@ -149,7 +149,7 @@ export class VapiClient {
   async makeCall(phoneNumber: string, language: Language = 'en', assistantId?: string) {
     const callConfig = {
       phoneNumber,
-      assistantId: assistantId || vapiConfigs[language].assistant_id,
+      assistantId: assistantId || vapiConfigs[language as keyof typeof vapiConfigs].assistant_id,
       metadata: {
         language,
         purpose: 'health_registration',
@@ -209,7 +209,7 @@ export class VapiClient {
       // Add more languages...
     };
 
-    const keywords = symptomKeywords[language] || symptomKeywords.en;
+    const keywords = symptomKeywords[language as keyof typeof symptomKeywords] || symptomKeywords.en;
     const foundSymptoms: string[] = [];
     
     const lowerTranscript = transcript.toLowerCase();
@@ -287,7 +287,7 @@ IMPORTANT GUIDELINES:
 - Respect cultural sensitivities around health discussions
 
 EMERGENCY PROTOCOL:
-If urgent symptoms are reported, immediately say: "${healthPrompts[language]?.emergency || healthPrompts.en.emergency}"
+If urgent symptoms are reported, immediately say: "${healthPrompts[language as keyof typeof healthPrompts]?.emergency || healthPrompts.en.emergency}"
 
 Remember: You're helping vulnerable migrant workers access healthcare. Be compassionate and thorough.`;
   }

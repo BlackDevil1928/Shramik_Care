@@ -74,7 +74,7 @@ export default function ConditionResults({
     }
   };
 
-  const t = translations[language] || translations.en;
+  const t = translations[language as keyof typeof translations] || translations.en;
 
   const getUrgencyColor = (urgency: UrgencyLevel) => {
     switch (urgency) {
@@ -122,7 +122,7 @@ export default function ConditionResults({
                 key={symptom.symptomId}
                 className={`inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 ${isKioskMode ? 'text-base' : ''}`}
               >
-                {symptomData?.icon} {symptomData?.name[language] || symptomData?.name.en} ({symptom.severity})
+                {symptomData?.icon} {symptomData?.name[language as keyof typeof symptomData.name] || symptomData?.name.en} ({symptom.severity})
               </span>
             );
           })}
@@ -155,7 +155,7 @@ export default function ConditionResults({
                 >
                   <div className="flex justify-between items-start mb-2">
                     <h4 className={`font-medium ${isKioskMode ? 'text-lg' : 'text-base'}`}>
-                      {condition.name[language] || condition.name.en}
+                      {condition.name[language as keyof typeof condition.name] || condition.name.en}
                     </h4>
                     <span className={`px-3 py-1 rounded-full text-sm ${
                       match.confidence > 0.7 ? 'bg-green-100 text-green-800' :
@@ -167,7 +167,7 @@ export default function ConditionResults({
                   </div>
                   
                   <p className={`text-gray-600 mb-3 ${isKioskMode ? 'text-base' : 'text-sm'}`}>
-                    {condition.description[language] || condition.description.en}
+                    {condition.description[language as keyof typeof condition.description] || condition.description.en}
                   </p>
                   
                   <p className={`text-gray-500 mb-3 ${isKioskMode ? 'text-sm' : 'text-xs'}`}>
@@ -180,7 +180,7 @@ export default function ConditionResults({
                       {t.recommendations}:
                     </h5>
                     <ul className={`list-disc list-inside space-y-1 text-gray-700 ${isKioskMode ? 'text-base' : 'text-sm'}`}>
-                      {(condition.recommendations[language] || condition.recommendations.en).map((rec, i) => (
+                      {(condition.recommendations[language as keyof typeof condition.recommendations] || condition.recommendations.en).map((rec, i) => (
                         <li key={i}>{rec}</li>
                       ))}
                     </ul>

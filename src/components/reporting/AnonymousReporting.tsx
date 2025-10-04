@@ -177,18 +177,20 @@ const AnonymousReporting: React.FC<AnonymousReportingProps> = ({
     hi: {
       title: "गुमनाम स्वास्थ्य रिपोर्ट",
       subtitle: "पूरी तरह से गुमनाम रहते हुए अपने समुदाय के स्वास्थ्य की रक्षा में मदद करें",
-      privacyAssurance: "🔒 आपकी पहचान कभी भी स्टोर या ट्रैक नहीं की जाती",
-      // ... (would include all translations)
+      privacyAssurance: "🔒 आपकी पहचान कभी भी स्टोर या ट्रैक नहीं की जाती"
     },
     ml: {
       title: "അജ്ഞാത ആരോഗ്യ റിപ്പോർട്ട്",
       subtitle: "പൂർണ്ണമായും അജ്ഞാതനായി തുടരുന്നതിനിടെ നിങ്ങളുടെ കമ്മ്യൂണിറ്റിയുടെ ആരോഗ്യം സംരക്ഷിക്കാൻ സഹായിക്കുക",
-      privacyAssurance: "🔒 നിങ്ങളുടെ ഐഡന്റിറ്റി ഒരിക്കലും സംഭരിക്കുകയോ ട്രാക്ക് ചെയ്യുകയോ ചെയ്യില്ല",
-      // ... (would include all translations)
+      privacyAssurance: "🔒 നിങ്ങളുടെ ഐഡന്റിറ്റി ഒരിക്കലും സംഭരിക്കുകയോ ട്രാക്ക് ചെയ്യുകയോ ചെയ്യില്ല"
     }
   };
 
-  const currentContent = content[language] || content.en;
+  // Get current language content with fallback to English for missing properties
+  const langContent = content[language as keyof typeof content];
+  const currentContent = langContent && typeof langContent === 'object' && 'steps' in langContent 
+    ? langContent 
+    : content.en;
 
   const districts = [
     'thiruvananthapuram', 'kollam', 'pathanamthitta', 'alappuzha', 
@@ -233,7 +235,7 @@ const AnonymousReporting: React.FC<AnonymousReportingProps> = ({
       case 'consent':
         return userConsent;
       case 'symptoms':
-        return reportData.symptoms && reportData.symptoms.length > 0;
+        return !!(reportData.symptoms && reportData.symptoms.length > 0);
       case 'severity':
         return !!reportData.severity;
       case 'duration':

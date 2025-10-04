@@ -54,9 +54,9 @@ export const dbHelpers = {
   },
 
   async updateWorker(id: string, updates: any) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase
       .from('migrant_workers')
-      .update(updates as any)
+      .update as any)(updates)
       .eq('id', id)
       .select()
       .single();
@@ -114,9 +114,9 @@ export const dbHelpers = {
   },
 
   async updateVoiceSession(call_id: string, updates: any) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase
       .from('voice_sessions')
-      .update(updates as any)
+      .update as any)(updates)
       .eq('call_id', call_id)
       .select()
       .single();

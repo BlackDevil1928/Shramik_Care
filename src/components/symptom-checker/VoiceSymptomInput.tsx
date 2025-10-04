@@ -65,7 +65,7 @@ export default function VoiceSymptomInput({
     }
   };
 
-  const t = translations[language] || translations.en;
+  const t = translations[language as keyof typeof translations] || translations.en;
 
   const startRecording = async () => {
     try {

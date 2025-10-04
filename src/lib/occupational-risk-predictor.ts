@@ -406,12 +406,12 @@ export class OccupationalRiskPredictor {
     )[0];
 
     // Check for related symptoms
-    const relatedSymptoms = recentAssessment.symptoms.filter(symptom => 
+    const relatedSymptoms = recentAssessment.symptoms.filter((symptom: any) => 
       condition.symptoms.includes(symptom.symptomId) && symptom.workRelated
     );
 
     if (relatedSymptoms.length > 0) {
-      const avgSeverity = relatedSymptoms.reduce((sum, s) => sum + s.severity, 0) / relatedSymptoms.length;
+      const avgSeverity = relatedSymptoms.reduce((sum: number, s: any) => sum + s.severity, 0) / relatedSymptoms.length;
       return 1.0 + (avgSeverity / 10); // Severity is 1-10 scale
     }
 
