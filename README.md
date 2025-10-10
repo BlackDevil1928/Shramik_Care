@@ -10,7 +10,7 @@
 
 A futuristic, multilingual, voice-first digital health record management system designed specifically for migrant workers in Kerala. Built to support UN Sustainable Development Goals with cutting-edge voice AI technology, real-time disease surveillance, and zero-literacy friendly interfaces.
 
-![Kerala Health System](https://via.placeholder.com/1200x400/008B8B/FFFFFF?text=Kerala+Migrant+Health+System)
+![Kerala Health System](https://shramik-care.vercel.app/)
 
 ## 🌟 Key Features
 
