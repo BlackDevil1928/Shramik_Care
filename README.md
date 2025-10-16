@@ -18,7 +18,7 @@ A futuristic, multilingual, voice-first digital health record management system 
 - **Multilingual Voice AI** powered by Vapi.ai
 - Supports 7 languages: English, Hindi, Bengali, Odia, Tamil, Nepali, Malayalam
 - Zero-literacy friendly design for universal accessibility
-- Real-time voice-to-health record conversion
+- Real-time voice-to-health record conversion 
 
 ### 🆔 **Digital Health Identity**
 - **Migrant Health ID (MHI)** generation with QR codes
