@@ -149,7 +149,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 3. Get multilingual health guidance
 4. Receive location-based care recommendations
 
-### For Healthcare Providers
+### For Healthcare Providers :
 
 #### 👨‍⚕️ **Doctor Dashboard**
 - Access patient records via MHI scan
