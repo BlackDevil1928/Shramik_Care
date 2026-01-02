@@ -12,7 +12,7 @@ A futuristic, multilingual, voice-first digital health record management system 
 
 [Kerala Health System](https://shramik-care.vercel.app/)
 
-## 🌟 Key Features
+## 🌟Key Features
 
 ### 🎤 **Voice-First Interface**
 - **Multilingual Voice AI** powered by Vapi.ai
