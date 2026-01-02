@@ -32,7 +32,7 @@ A futuristic, multilingual, voice-first digital health record management system 
 - Automated outbreak detection and alerts
 - Public health intelligence dashboard
 
-### 🔒 **Privacy & Security**
+### 🔒**Privacy & Security**
 - **Anonymous Health Reporting** option
 - GDPR and NDHM compliant data handling
 - Row-level security with Supabase
