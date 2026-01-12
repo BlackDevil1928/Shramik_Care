@@ -26,7 +26,7 @@ A futuristic, multilingual, voice-first digital health record management system 
 - Secure, privacy-compliant health wallet
 - Cross-district healthcare access
 
-### 🗺️ **Real-Time Disease Surveillance**
+### 🗺️**Real-Time Disease Surveillance**
 - **3D Interactive Kerala Map** with Three.js
 - Live disease hotspot visualization
 - Automated outbreak detection and alerts
