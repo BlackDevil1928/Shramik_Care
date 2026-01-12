@@ -20,7 +20,7 @@ A futuristic, multilingual, voice-first digital health record management system 
 - Zero-literacy friendly design for universal accessibility
 - Real-time voice-to-health record conversion 
 
-### 🆔 **Digital Health Identity**
+### 🆔**Digital Health Identity**
 - **Migrant Health ID (MHI)** generation with QR codes
 - Instant SMS confirmations in native languages
 - Secure, privacy-compliant health wallet
