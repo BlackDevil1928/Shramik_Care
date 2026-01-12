@@ -38,7 +38,7 @@ A futuristic, multilingual, voice-first digital health record management system 
 - Row-level security with Supabase
 - End-to-end encryption for sensitive data
 
-### 🏭 **Occupational Health Intelligence**
+### 🏭**Occupational Health Intelligence**
 - Job-specific health risk predictions
 - Preventive care recommendations
 - Environmental health monitoring
